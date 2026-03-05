@@ -1,15 +1,10 @@
 import { Router } from "express";
-import {
-  create,
-  find,
-  findOne,
-  remove,
-} from "../controllers/file.controller.ts";
+import { create, find, findOne, remove } from "../controllers/file.controller";
 
 import multer from "multer";
-import { CustomError } from "../utils/CustomError.ts";
-import { hashName } from "../utils/fileHelper.ts";
-import { UPLOAD_DIR } from "../config/db.ts";
+import { CustomError } from "../utils/CustomError";
+import { hashName } from "../utils/fileHelper";
+import { UPLOAD_DIR } from "../config/db";
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, UPLOAD_DIR);

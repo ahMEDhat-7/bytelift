@@ -1,16 +1,16 @@
 import type { Request, Response, NextFunction } from "express";
-import wrapper from "../middlewares/wrapper.middleware.ts";
-import { CustomError } from "../utils/CustomError.ts";
-import { hashPassword, verifyPassword } from "../utils/hashHelper.ts";
-import { getPool } from "../config/db.ts";
-import { generateToken } from "../utils/tokenHelper.ts";
+import wrapper from "../middlewares/wrapper.middleware";
+import { CustomError } from "../utils/CustomError";
+import { hashPassword, verifyPassword } from "../utils/hashHelper";
+import { getPool } from "../config/db";
+import { generateToken } from "../utils/tokenHelper";
 
 const signup = wrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
-      if (!email && !password)
-        return next(new CustomError(400, "Missing credintials"));
+      if (!email || !password)
+        return next(new CustomError(400, "Missing credentials"));
 
       const user = await getPool().query(
         "SELECT id ,email, password_hash FROM users WHERE email= $1;",
@@ -42,15 +42,16 @@ const login = wrapper(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
-      if (!email && !password)
-        return next(new CustomError(400, "Missing credintials"));
+      if (!email || !password)
+        return next(new CustomError(400, "Missing credentials"));
 
       const user = await getPool().query(
         "SELECT id ,email, password_hash FROM users WHERE email= $1;",
         [email],
       );
-      if (!user.rows)
+      if (!user.rows.length)
         return next(new CustomError(401, "Invalid email or password"));
+
       const check = await verifyPassword(password, user.rows[0].password_hash);
       if (!check) return next(new CustomError(401, "Invalid password"));
 

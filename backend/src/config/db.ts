@@ -44,5 +44,10 @@ function getPool() {
   }
   return pool;
 }
-const UPLOAD_DIR = "../uploads";
+
+const UPLOAD_DIR = path.resolve(process.cwd(), "../uploads");
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+
 export { init, getPool, UPLOAD_DIR };

@@ -1,5 +1,5 @@
-import app from "./config/app.ts";
-import { init } from "./config/db.ts";
+import app from "./config/app";
+import { init } from "./config/db";
 
 (() => {
   app.listen(process.env.PORT, () => {

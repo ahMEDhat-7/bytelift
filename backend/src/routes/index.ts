@@ -1,7 +1,7 @@
 import { Router } from "express";
-import authRouter from "./auth.route.ts";
-import fileRouter from "./file.route.ts";
-import { authGaurd } from "../middlewares/gaurd.middleware.ts";
+import authRouter from "./auth.route";
+import fileRouter from "./file.route";
+import { authGaurd } from "../middlewares/gaurd.middleware";
 
 const router = Router();
 

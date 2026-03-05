@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import wrapper from "../middlewares/wrapper.middleware.ts";
-import { CustomError } from "../utils/CustomError.ts";
-import { getPool, UPLOAD_DIR } from "../config/db.ts";
+import wrapper from "../middlewares/wrapper.middleware";
+import { CustomError } from "../utils/CustomError";
+import { getPool, UPLOAD_DIR } from "../config/db";
 import fs from "fs";
 import path from "path";
 
