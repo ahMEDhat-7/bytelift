@@ -12,16 +12,25 @@ const signup = wrapper(
       if (!email && !password)
         return next(new CustomError(400, "Missing credintials"));
 
-      const hashedPassword = await hashPassword(password);
       const user = await getPool().query(
-        "INSERT INTO users(email,password_hash) VALUES($1,$2);",
+        "SELECT id ,email, password_hash FROM users WHERE email= $1;",
+        [email],
+      );
+
+      if (user.rows.length > 0)
+        return next(new CustomError(400, "email already exists"));
+
+      const hashedPassword = await hashPassword(password);
+      const newUser = await getPool().query(
+        "INSERT INTO users(email,password_hash) VALUES($1,$2) RETURNING id, email;",
         [email, hashedPassword],
       );
-      const token = generateToken({ id: user.rows[0].id });
+
+      const token = generateToken({ id: newUser.rows[0].id });
 
       return res.status(201).json({
         message: "user created",
-        data: { id: user.rows[0].id, email: user.rows[0].email, token },
+        data: { id: newUser.rows[0].id, email: newUser.rows[0].email, token },
       });
     } catch (error) {
       return next(new CustomError(500, "Something wrong occurs"));
