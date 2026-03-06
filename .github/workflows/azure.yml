@@ -53,15 +53,15 @@ jobs:
             [
               {"name": "PORT", "value": "8080"},
               {"name": "NODE_ENV", "value": "production"},
-              {"name": "DB_USER", "value": "${{ vars.DB_USER }}"},
-              {"name": "DB_HOST", "value": "${{ vars.DB_HOST }}"},
-              {"name": "DB_NAME", "value": "${{ vars.DB_NAME }}"},
-              {"name": "DB_PORT", "value": "${{ vars.DB_PORT }}"},
+              {"name": "DB_USER", "value": "${{ secrets.DB_USER }}"},
+              {"name": "DB_HOST", "value": "${{ secrets.DB_HOST }}"},
+              {"name": "DB_NAME", "value": "${{ secrets.DB_NAME }}"},
+              {"name": "DB_PORT", "value": "${{ secrets.DB_PORT }}"},
               {"name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}"},
               {"name": "DB_CA", "value": "${{ secrets.DB_CA }}"},
               {"name": "JWT_SECRET", "value": "${{ secrets.JWT_SECRET }}"},
-              {"name": "CLOUDINARY_CLOUD_NAME", "value": "${{ vars.CLOUDINARY_CLOUD_NAME }}"},
-              {"name": "CLOUDINARY_API_KEY", "value": "${{ vars.CLOUDINARY_API_KEY }}"},
+              {"name": "CLOUDINARY_CLOUD_NAME", "value": "${{ secrets.CLOUDINARY_CLOUD_NAME }}"},
+              {"name": "CLOUDINARY_API_KEY", "value": "${{ secrets.CLOUDINARY_API_KEY }}"},
               {"name": "CLOUDINARY_API_SECRET", "value": "${{ secrets.CLOUDINARY_API_SECRET }}"}
             ]
 
