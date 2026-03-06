@@ -1,6 +1,6 @@
 {
-  "name": "bytelift-server",
-  "version": "0.1.0",
+  "name": "bytelift",
+  "version": "1.0.0",
   "private": true,
   "type": "commonjs",
   "main": "dist/index.js",
