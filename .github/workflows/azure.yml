@@ -37,6 +37,9 @@ jobs:
         working-directory: ./backend
         run: pnpm run build
 
+      - name: Copy frontend build to backend
+        run: mkdir -p ./backend/dist/frontend && cp -r ./frontend/dist/* ./backend/dist/frontend/
+
       - name: Azure login
         uses: azure/login@v2
         with:
@@ -49,4 +52,20 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: bytelift
+          package: ./backend/dist
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+
+      - name: Configure App Settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: bytelift
+          app-settings-json: |
+            [
+              {"name": "PORT", "value": "8080"},
+              {"name": "NODE_ENV", "value": "production"},
+              {"name": "DATABASE_URL", "value": "${{ secrets.DATABASE_URL }}"},
+              {"name": "JWT_SECRET", "value": "${{ secrets.JWT_SECRET }}"},
+              {"name": "CLOUDINARY_CLOUD_NAME", "value": "${{ secrets.CLOUDINARY_CLOUD_NAME }}"},
+              {"name": "CLOUDINARY_API_KEY", "value": "${{ secrets.CLOUDINARY_API_KEY }}"},
+              {"name": "CLOUDINARY_API_SECRET", "value": "${{ secrets.CLOUDINARY_API_SECRET }}"}
+            ]
