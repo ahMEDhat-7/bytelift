@@ -3,7 +3,7 @@ name: Deploy Backend
 on:
   push:
     branches: [main]
-    paths: ["frontend/**", "backend/**"]
+    # paths: ["frontend/**", "backend/**"]
 
 permissions:
   contents: read
@@ -45,25 +45,27 @@ jobs:
       - name: Copy frontend build to backend
         run: mkdir -p ./backend/dist/frontend && cp -r ./frontend/dist/* ./backend/dist/frontend/
 
+      - name: Azure CLI version check
+        run: az --version
+
       - name: Configure App Settings
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: bytelift
-          app-settings-json: |
-            [
-              {"name": "PORT", "value": "8080"},
-              {"name": "NODE_ENV", "value": "production"},
-              {"name": "DB_USER", "value": "${{ secrets.DB_USER }}"},
-              {"name": "DB_HOST", "value": "${{ secrets.DB_HOST }}"},
-              {"name": "DB_NAME", "value": "${{ secrets.DB_NAME }}"},
-              {"name": "DB_PORT", "value": "${{ secrets.DB_PORT }}"},
-              {"name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}"},
-              {"name": "DB_CA", "value": "${{ secrets.DB_CA }}"},
-              {"name": "JWT_SECRET", "value": "${{ secrets.JWT_SECRET }}"},
-              {"name": "CLOUDINARY_CLOUD_NAME", "value": "${{ secrets.CLOUDINARY_CLOUD_NAME }}"},
-              {"name": "CLOUDINARY_API_KEY", "value": "${{ secrets.CLOUDINARY_API_KEY }}"},
-              {"name": "CLOUDINARY_API_SECRET", "value": "${{ secrets.CLOUDINARY_API_SECRET }}"}
-            ]
+        run: |
+          az webapp config appsettings set \
+            --name bytelift \
+            --resource-group bytelift-rg \
+            --settings \
+              PORT=8080 \
+              NODE_ENV=production \
+              DB_USER="${{ secrets.DB_USER }}" \
+              DB_HOST="${{ secrets.DB_HOST }}" \
+              DB_NAME="${{ secrets.DB_NAME }}" \
+              DB_PORT="${{ secrets.DB_PORT }}" \
+              DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+              DB_CA="${{ secrets.DB_CA }}" \
+              JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+              CLOUDINARY_CLOUD_NAME="${{ secrets.CLOUDINARY_CLOUD_NAME }}" \
+              CLOUDINARY_API_KEY="${{ secrets.CLOUDINARY_API_KEY }}" \
+              CLOUDINARY_API_SECRET="${{ secrets.CLOUDINARY_API_SECRET }}"
 
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
