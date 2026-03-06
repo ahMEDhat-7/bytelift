@@ -30,7 +30,7 @@ jobs:
           version: 9
 
       - name: Install dependencies (root)
-        run: pnpm install --frozen-lockfile
+        run: pnpm install -C frontend --frozen-lockfile && pnpm install -C backend --frozen-lockfile
 
       - name: Build frontend
         working-directory: frontend
